@@ -1,5 +1,5 @@
 package com.jozuo.kotlin.analysis
 
 interface Command {
-    fun execute(args: Array<String>)
+    fun execute(args: Array<String>): Boolean
 }

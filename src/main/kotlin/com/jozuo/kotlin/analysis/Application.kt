@@ -8,5 +8,7 @@ class Application
 
 fun main(args: Array<String>) {
     val context = SpringApplication.run(Application::class.java, *args)
-    context.getBean(Command::class.java).execute(args)
+    if (!context.getBean(Command::class.java).execute(args)) {
+        System.exit(1)
+    }
 }

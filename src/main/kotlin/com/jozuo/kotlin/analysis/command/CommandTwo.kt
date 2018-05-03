@@ -6,10 +6,11 @@ import org.springframework.stereotype.Component
 
 @Component
 @ConditionalOnProperty(name = ["command"], havingValue = "two")
-class CommandTwo() : Command {
+class CommandTwo : Command {
 
-    override fun execute(args: Array<String>) {
+    override fun execute(args: Array<String>): Boolean {
         println("CommandOneTwo call")
+        return true
     }
 }
 
