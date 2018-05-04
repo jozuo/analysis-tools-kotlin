@@ -5,6 +5,7 @@ import com.nhaarman.mockito_kotlin.doNothing
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.experimental.runners.Enclosed
@@ -34,10 +35,17 @@ class DiffFileCommandTest {
 
         private lateinit var out: ByteArrayOutputStream
 
+        private val originalOut = System.out
+
         @Before
         fun setup() {
             out = ByteArrayOutputStream()
             System.setOut(PrintStream(out))
+        }
+
+        @After
+        fun tearDown() {
+            System.setOut(originalOut)
         }
 
         @Test

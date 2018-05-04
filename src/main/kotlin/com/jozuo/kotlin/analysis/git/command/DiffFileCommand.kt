@@ -22,7 +22,7 @@ class DiffFileCommand: Command {
         options.addOption("o", "output", true, "Output Directory")
         options.addOption("h", "help", false, "Help Message")
 
-        var cl:CommandLine? = null
+        val cl: CommandLine?
         try {
             cl = DefaultParser().parse(options, args)
         } catch (e: UnrecognizedOptionException) {
@@ -42,6 +42,6 @@ class DiffFileCommand: Command {
     private fun printUsage(): Boolean {
         println(HelpFormatter().printHelp(
                 "java -jar analysis.jar --command=diff-file [-o <arg>]", options))
-        return false;
+        return false
     }
 }

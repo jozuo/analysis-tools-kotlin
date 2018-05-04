@@ -15,6 +15,7 @@ import org.mockito.Mockito.`when`
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(Enclosed::class)
+// 実行環境に依存したテストのため通常は実行しない
 @Ignore
 class GitRepositoryTest {
 
@@ -31,7 +32,6 @@ class GitRepositoryTest {
         @JvmField
         val thrown = ExpectedException.none()!!
 
-        // 実行環境に依存したテストのため通常は実行しない
         @Test
         fun 差分が取得できる場合() {
             // prepare
@@ -46,7 +46,6 @@ class GitRepositoryTest {
             assertThat(results[3], `is`("A\ttslint.json"))
         }
 
-        // 実行環境に依存したテストのため通常は実行しない
         @Test
         fun 差分が取得できない場合() {
             // prepare
@@ -56,7 +55,6 @@ class GitRepositoryTest {
             assertThat(results.size, `is`(0))
         }
 
-        // 実行環境に依存したテストのため通常は実行しない
         @Test
         fun コマンド実行に失敗する場合() {
             // prepare
