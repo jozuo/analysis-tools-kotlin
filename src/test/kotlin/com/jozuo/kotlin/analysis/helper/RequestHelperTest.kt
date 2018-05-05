@@ -1,8 +1,10 @@
 package com.jozuo.kotlin.analysis.helper
 
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.Request
-import org.hamcrest.CoreMatchers.*
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.fail
 import org.junit.Ignore
@@ -27,40 +29,26 @@ class RequestHelperTest {
         @Autowired
         private lateinit var helper: RequestHelper
 
+
+        private val type = object : TypeToken<Map<String, Any>>() {}.type
+
         val baseUrl = "http://localhost/api/v4"
 
         @Test
-        fun レスポンスがオブジェクトの場合() {
+        fun リクエスト成功の場合() {
             // run
             val request = Request.Builder()
                     .url("$baseUrl/projects/1")
                     .header("PRIVATE-TOKEN", "t3zTVztoEz2HJ5Rs6LEX")
                     .get()
                     .build()
-            val project = helper.execute(request, Project::class.java)
+            val responseBody = helper.execute(request)
 
             // test
-            assertThat(project.id, `is`(1))
-            assertThat(project.defaultBranch, `is`("master"))
-            assertThat(project.archived, `is`(false))
-            assertThat(project.groupAccess, `is`(nullValue()))
-        }
-
-        @Test
-        fun レスポンスが配列の場合() {
-            // run
-            val request = Request.Builder()
-                    .url("$baseUrl/projects/1/repository/commits/f962449f47d2c034db3a922f6ce6b94bc5017c9c/diff")
-                    .header("PRIVATE-TOKEN", "t3zTVztoEz2HJ5Rs6LEX")
-                    .get()
-                    .build()
-
-            val type = object : TypeToken<List<Diff>>() {}.type
-            val diffs = helper.execute<List<Diff>>(request, type)
-            assertThat(diffs.size, `is`(1))
-            assertThat(diffs[0].diff, `is`(""))
-            assertThat(diffs[0].newPath, `is`("sonar-project.properties"))
-            assertThat(diffs[0].newFile, `is`(false))
+            val responseMap = Gson().fromJson<Map<String, Any>>(responseBody, type)
+            assertThat(responseMap["id"].toString(), `is`("1.0"))
+            assertThat(responseMap["default_branch"].toString(), `is`("master"))
+            assertThat(responseMap["archived"].toString(), `is`("false"))
         }
 
         @Test
@@ -78,7 +66,7 @@ class RequestHelperTest {
                     .build()
 
             try {
-                helper.execute(request, Project::class.java)
+                helper.execute(request)
                 fail()
             } catch (e: IllegalStateException) {
                 // assert
@@ -90,17 +78,4 @@ class RequestHelperTest {
             }
         }
     }
-}
-
-class Project {
-    var id: Int? = null
-    var defaultBranch: String? = null
-    var archived: Boolean? = null
-    var groupAccess: String? = null
-}
-
-class Diff {
-    val diff: String? = null
-    val newPath: String? = null
-    val newFile: Boolean? = null
 }
