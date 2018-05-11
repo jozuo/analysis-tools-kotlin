@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(Enclosed::class)
 // 実行環境に依存したテストのため通常は実行しない
-@Ignore
 class GitRepositoryTest {
 
     @RunWith(SpringRunner::class)
@@ -33,6 +32,7 @@ class GitRepositoryTest {
         val thrown = ExpectedException.none()!!
 
         @Test
+        @Ignore("実行環境に依存するテスト")
         fun 差分が取得できる場合() {
             // prepare
             `when`(env.getProjectRoot()).thenReturn("/Users/toru/work/professional-tool")
@@ -47,6 +47,7 @@ class GitRepositoryTest {
         }
 
         @Test
+        @Ignore("実行環境に依存するテスト")
         fun 差分が取得できない場合() {
             // prepare
             `when`(env.getProjectRoot()).thenReturn("/Users/toru/work/professional-tool")
@@ -56,6 +57,7 @@ class GitRepositoryTest {
         }
 
         @Test
+        @Ignore("実行環境に依存するテスト")
         fun コマンド実行に失敗する場合() {
             // prepare
             `when`(env.getProjectRoot()).thenReturn("/Users/toru/work")
@@ -81,6 +83,7 @@ class GitRepositoryTest {
 
         // 実行環境に依存したテストのため通常は実行しない
         @Test
+        @Ignore("実行環境に依存するテスト")
         fun 差分が取得できる場合() {
             // prepare
             `when`(env.getProjectRoot()).thenReturn("/Users/toru/work/professional-tool")
@@ -98,6 +101,7 @@ class GitRepositoryTest {
 
         // 実行環境に依存したテストのため通常は実行しない
         @Test
+        @Ignore("実行環境に依存するテスト")
         fun 差分が取得できない場合() {
             // prepare
             `when`(env.getProjectRoot()).thenReturn("/Users/toru/work/professional-tool")
@@ -108,6 +112,7 @@ class GitRepositoryTest {
 
         // 実行環境に依存したテストのため通常は実行しない
         @Test
+        @Ignore("実行環境に依存するテスト")
         fun コマンド実行に失敗する場合() {
             // prepare
             `when`(env.getProjectRoot()).thenReturn("/Users/toru/work")

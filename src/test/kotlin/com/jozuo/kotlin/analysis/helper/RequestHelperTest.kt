@@ -19,7 +19,6 @@ import java.io.PrintStream
 
 @RunWith(Enclosed::class)
 // 実行環境に依存したテストのため通常は実行しない
-@Ignore
 class RequestHelperTest {
 
     @RunWith(SpringRunner::class)
@@ -35,6 +34,7 @@ class RequestHelperTest {
         val baseUrl = "http://localhost/api/v4"
 
         @Test
+        @Ignore("実行環境に依存するテスト")
         fun リクエスト成功の場合() {
             // run
             val request = Request.Builder()
@@ -52,6 +52,7 @@ class RequestHelperTest {
         }
 
         @Test
+        @Ignore("実行環境に依存するテスト")
         fun 例外レスポンスの場合() {
             // prepare
             val original = System.out

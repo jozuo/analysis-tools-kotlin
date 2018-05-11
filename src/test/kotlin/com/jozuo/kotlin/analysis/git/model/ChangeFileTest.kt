@@ -19,17 +19,17 @@ class ChangeFileTest {
         }
 
         @Test
-        fun getCommitHash() {
+        fun commitHash() {
             assertThat(instance.commitHash, `is`("commit-hash"))
         }
 
         @Test
-        fun getName() {
+        fun name() {
             assertThat(instance.name, `is`("name"))
         }
 
         @Test
-        fun getStatus() {
+        fun status() {
             assertThat(instance.status, `is`("status"))
         }
         @Test
