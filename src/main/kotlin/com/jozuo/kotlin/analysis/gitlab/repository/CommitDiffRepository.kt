@@ -2,8 +2,8 @@ package com.jozuo.kotlin.analysis.gitlab.repository
 
 import com.google.gson.reflect.TypeToken
 import com.jozuo.kotlin.analysis.Env
-import com.jozuo.kotlin.analysis.gitlab.model.DiffInfo
 import com.jozuo.kotlin.analysis.gitlab.model.DiffInfoBuilderImpl
+import com.jozuo.kotlin.analysis.gitlab.model.DiffInfoList
 import com.jozuo.kotlin.analysis.helper.RequestHelper
 import com.jozuo.kotlin.analysis.repository.ApiCallRepository
 import okhttp3.Request
@@ -18,7 +18,7 @@ class CommitDiffRepository : ApiCallRepository() {
     private lateinit var helper: RequestHelper
 
     // TODO レスポンスをドメインオブジェクトにする
-    fun getDiffInfoList(commitHash: String): List<DiffInfo> {
+    fun getDiffInfoList(commitHash: String): DiffInfoList {
         Thread.sleep(200)
 
         val request = Request.Builder()
@@ -29,11 +29,11 @@ class CommitDiffRepository : ApiCallRepository() {
 
         val type = object : TypeToken<List<Entity>>() {}.type
         val entities = toResponse<List<Entity>>(helper.execute(request), type)
-        return entities.filter {
+        return DiffInfoList(entities.filter {
             it.deletedFile != true
         }.map {
             DiffInfoBuilderImpl().setEntity(it).build()
-        }
+        })
     }
 
     data class Entity(

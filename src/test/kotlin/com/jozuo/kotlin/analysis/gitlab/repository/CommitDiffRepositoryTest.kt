@@ -46,26 +46,26 @@ class CommitDiffRepositoryTest {
             `when`(helper.execute(any())).thenReturn(load("commit-diff-01.json"))
 
             // run
-            val diffs = repository.getDiffInfoList("commit-hash")
+            val diffInfoList = repository.getDiffInfoList("commit-hash")
 
             // test
             var diff: DiffInfo
 
-            assertThat(diffs.size, `is`(3))
+            assertThat(diffInfoList.diffInfos.size, `is`(3))
             // - 1ファイル名
-            diff = diffs[0]
+            diff = diffInfoList.diffInfos[0]
             assertThat(diff.filePath, `is`("app/src/component/area-correction/area-correction.component.ts"))
             assertThat(diff.ranges.size, `is`(2))
             assertThat(diff.ranges[0].toString(), `is`("Range(begin=2, end=11)"))
             assertThat(diff.ranges[1].toString(), `is`("Range(begin=36, end=44)"))
             // 2ファイル名
-            diff = diffs[1]
+            diff = diffInfoList.diffInfos[1]
             assertThat(diff.filePath, `is`("app/src/component/color-matching/color-matching.component.ts"))
             assertThat(diff.ranges.size, `is`(2))
             assertThat(diff.ranges[0].toString(), `is`("Range(begin=15, end=22)"))
             assertThat(diff.ranges[1].toString(), `is`("Range(begin=87, end=105)"))
             // 3ファイル名
-            diff = diffs[2]
+            diff = diffInfoList.diffInfos[2]
             assertThat(diff.filePath, `is`("app/src/component/geometry-off/geometry-off.component.ts"))
             assertThat(diff.ranges.size, `is`(2))
             assertThat(diff.ranges[0].toString(), `is`("Range(begin=1, end=8)"))
