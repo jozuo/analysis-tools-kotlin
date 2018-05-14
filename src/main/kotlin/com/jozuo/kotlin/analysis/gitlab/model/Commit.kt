@@ -1,10 +1,12 @@
 package com.jozuo.kotlin.analysis.gitlab.model
 
+import com.jozuo.kotlin.analysis.gitlab.repository.CommitCommentRepository
+
 class Commit(
         val hash: String,
         private val diffInfoList: DiffInfoList) {
 
-    // private lateinit var repository: CommitCommentRepository;
+     private lateinit var repository: CommitCommentRepository;
 
     private val commitComments: MutableList<CommitComment> = mutableListOf()
 
@@ -31,15 +33,14 @@ class Commit(
         return builder.toString()
     }
 
-//    fun postComment() {
-//        postIndividualComment();
-//        repository.postSummaryComment(this);
-//    }
-//
-//    private fun postIndividualComment() {
-//        commitComments.filter { it.isInModifiedLine(diffInfoList) }
-//                .forEach { repository.postIndividualComment(it) }
-//
-//    }
+    fun postComment() {
+        postIndividualComment();
+        repository.postSummaryComment(this);
+    }
 
+    private fun postIndividualComment() {
+        commitComments.filter { it.isInModifiedLine(diffInfoList) }
+                .forEach { repository.postIndividualComment(it) }
+
+    }
 }

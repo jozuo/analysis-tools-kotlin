@@ -318,13 +318,3 @@ class CommitCommentTest {
     }
 }
 
-
-fun createCommit(commitHash: String, diffInfoList: DiffInfoList? = null): Commit {
-    val list = if (diffInfoList == null) {
-        val ranges = listOf(Range(10, 20), Range(30, 40))
-        DiffInfoList(listOf(DiffInfo(DiffInfoTestBuilder("path string", ranges))))
-    } else {
-        diffInfoList
-    }
-    return Commit(commitHash, list)
-}
