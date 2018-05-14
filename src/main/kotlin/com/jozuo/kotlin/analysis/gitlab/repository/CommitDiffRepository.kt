@@ -17,7 +17,6 @@ class CommitDiffRepository : ApiCallRepository() {
     @Autowired
     private lateinit var helper: RequestHelper
 
-    // TODO レスポンスをドメインオブジェクトにする
     fun getDiffInfoList(commitHash: String): DiffInfoList {
         Thread.sleep(200)
 

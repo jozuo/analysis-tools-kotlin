@@ -25,7 +25,7 @@ class CommitCommentTest {
     @SpringBootTest
     class constructor {
 
-        private val commit = Commit("commit hash string")
+        private val commit = createCommit("commit hash string")
 
         @Rule
         @JvmField
@@ -75,7 +75,7 @@ class CommitCommentTest {
         @Autowired
         private lateinit var beanFactory: AutowireCapableBeanFactory
 
-        private val commit = Commit("commit hash string")
+        private val commit = createCommit("commit hash string")
         private val line = "\"commit hash\", \"file path\", 123, \"comment message\""
         private var commitComment: CommitComment? = null
 
@@ -117,72 +117,72 @@ class CommitCommentTest {
 
     @RunWith(SpringRunner::class)
     @SpringBootTest
-    class isModifiedLine {
-        private val commit = Commit("commit hash string")
+    class isInModifiedLine {
         private val ranges = listOf(Range(10, 20), Range(30, 40))
         private val diffInfoList = DiffInfoList(listOf(DiffInfo(DiffInfoTestBuilder("path string", ranges))))
+        private val commit = createCommit("commit hash string", diffInfoList)
 
         @Test
         fun 行番号がDiff範囲1よりも小さい場合() {
             val line = "\"commit hash\",\"path string\", 9, \"comment message\""
             val commitComment = CommitComment(commit, line)
-            assertThat(commitComment.isModifiedLine(diffInfoList), `is`(false))
+            assertThat(commitComment.isInModifiedLine(diffInfoList), `is`(false))
         }
 
         @Test
         fun 行番号がDiff範囲1の下限の場合() {
             val line = "\"commit hash\",\"path string\", 10, \"comment message\""
             val commitComment = CommitComment(commit, line)
-            assertThat(commitComment.isModifiedLine(diffInfoList), `is`(true))
+            assertThat(commitComment.isInModifiedLine(diffInfoList), `is`(true))
         }
 
         @Test
         fun 行番号がDiff範囲1の上限の場合() {
             val line = "\"commit hash\",\"path string\", 20, \"comment message\""
             val commitComment = CommitComment(commit, line)
-            assertThat(commitComment.isModifiedLine(diffInfoList), `is`(true))
+            assertThat(commitComment.isInModifiedLine(diffInfoList), `is`(true))
         }
 
         @Test
         fun 行番号がDiff範囲1の上限よりも大きい場合() {
             val line = "\"commit hash\",\"path string\", 21, \"comment message\""
             val commitComment = CommitComment(commit, line)
-            assertThat(commitComment.isModifiedLine(diffInfoList), `is`(false))
+            assertThat(commitComment.isInModifiedLine(diffInfoList), `is`(false))
         }
 
         @Test
         fun 行番号がDiff範囲2よりも小さい場合() {
             val line = "\"commit hash\",\"path string\", 29, \"comment message\""
             val commitComment = CommitComment(commit, line)
-            assertThat(commitComment.isModifiedLine(diffInfoList), `is`(false))
+            assertThat(commitComment.isInModifiedLine(diffInfoList), `is`(false))
         }
 
         @Test
         fun 行番号がDiff範囲2の下限の場合() {
             val line = "\"commit hash\",\"path string\", 30, \"comment message\""
             val commitComment = CommitComment(commit, line)
-            assertThat(commitComment.isModifiedLine(diffInfoList), `is`(true))
+            assertThat(commitComment.isInModifiedLine(diffInfoList), `is`(true))
         }
 
         @Test
         fun 行番号がDiff範囲2の上限の場合() {
             val line = "\"commit hash\",\"path string\", 40, \"comment message\""
             val commitComment = CommitComment(commit, line)
-            assertThat(commitComment.isModifiedLine(diffInfoList), `is`(true))
+            assertThat(commitComment.isInModifiedLine(diffInfoList), `is`(true))
         }
 
         @Test
         fun 行番号がDiff範囲2の上限よりも大きい場合() {
             val line = "\"commit hash\",\"path string\", 41, \"comment message\""
             val commitComment = CommitComment(commit, line)
-            assertThat(commitComment.isModifiedLine(diffInfoList), `is`(false))
+            assertThat(commitComment.isInModifiedLine(diffInfoList), `is`(false))
         }
 
         @Test
         fun Diff情報が存在しないファイルの場合() {
             val line = "\"commit hash\",\"hogehogehoge\", 30, \"comment message\""
             val commitComment = CommitComment(commit, line)
-            assertThat(commitComment.isModifiedLine(diffInfoList), `is`(false))
+            assertThat(commitComment.isInModifiedLine(diffInfoList), `is`(false))
         }
     }
 
@@ -190,7 +190,7 @@ class CommitCommentTest {
     @SpringBootTest
     class getIndividualMessage {
 
-        private val commit = Commit("commit hash string")
+        private val commit = createCommit("commit hash string")
 
         @Test
         fun 最低限の引数の場合() {
@@ -245,7 +245,7 @@ class CommitCommentTest {
         @Autowired
         private lateinit var beanFactory: AutowireCapableBeanFactory
 
-        private val commit = Commit("commit hash string")
+        private val commit = createCommit("commit hash string")
 
         private val gitlabBlobUrl = "http://localhost/git1/blob/commit hash string/file path/#L123"
 
@@ -318,3 +318,13 @@ class CommitCommentTest {
     }
 }
 
+
+fun createCommit(commitHash: String, diffInfoList: DiffInfoList? = null): Commit {
+    val list = if (diffInfoList == null) {
+        val ranges = listOf(Range(10, 20), Range(30, 40))
+        DiffInfoList(listOf(DiffInfo(DiffInfoTestBuilder("path string", ranges))))
+    } else {
+        diffInfoList
+    }
+    return Commit(commitHash, list)
+}

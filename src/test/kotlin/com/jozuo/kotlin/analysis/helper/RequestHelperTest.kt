@@ -2,9 +2,9 @@ package com.jozuo.kotlin.analysis.helper
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import okhttp3.FormBody
 import okhttp3.Request
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.fail
 import org.junit.Ignore
@@ -23,11 +23,46 @@ class RequestHelperTest {
 
     @RunWith(SpringRunner::class)
     @SpringBootTest
-    class executeGET {
+    class executePOST {
 
         @Autowired
         private lateinit var helper: RequestHelper
 
+        private val type = object : TypeToken<Map<String, Any>>() {}.type
+
+        val baseUrl = "http://localhost/api/v4"
+
+        @Test
+        @Ignore("実行環境に依存するテスト")
+        fun リクエスト成功の場合() {
+            // run
+            val body = FormBody.Builder()
+                    .add("note", "test message from spring")
+                    .add("line_type", "new")
+                    .build()
+
+            val request = Request.Builder()
+                    .url("$baseUrl//projects/1/repository/commits/6fceea7567522c99734614680f022d9ce6e5a8e2/comments")
+                    .header("PRIVATE-TOKEN", "r25vP4p9iRJg_ei7XqSg")
+                    .post(body)
+                    .build()
+
+            val responseBody = helper.execute(request)
+
+            // test
+            val responseMap = Gson().fromJson<Map<String, Any>>(responseBody, type)
+            assertThat(responseMap["note"].toString(), `is`("test message from spring"))
+            assertThat(responseMap["path"], `is`(nullValue()))
+            assertThat(responseMap["line"], `is`(nullValue()))
+        }
+    }
+
+    @RunWith(SpringRunner::class)
+    @SpringBootTest
+    class executeGET {
+
+        @Autowired
+        private lateinit var helper: RequestHelper
 
         private val type = object : TypeToken<Map<String, Any>>() {}.type
 
@@ -39,7 +74,7 @@ class RequestHelperTest {
             // run
             val request = Request.Builder()
                     .url("$baseUrl/projects/1")
-                    .header("PRIVATE-TOKEN", "t3zTVztoEz2HJ5Rs6LEX")
+                    .header("PRIVATE-TOKEN", "r25vP4p9iRJg_ei7XqSg")
                     .get()
                     .build()
             val responseBody = helper.execute(request)

@@ -37,7 +37,7 @@ class CommitComment(commit: Commit, private val line: String) {
         }
     }
 
-    fun isModifiedLine(diffInfoList: DiffInfoList): Boolean = diffInfoList.isModifiedLine(filePath, lineNo)
+    fun isInModifiedLine(diffInfoList: DiffInfoList): Boolean = diffInfoList.isModifiedLine(filePath, lineNo)
 
     fun getIndividualMessage() = "${getLevelIcon()}${getContents()}${getRuleLink()}"
 

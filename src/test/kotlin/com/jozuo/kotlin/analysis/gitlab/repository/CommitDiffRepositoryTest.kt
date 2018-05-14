@@ -36,7 +36,7 @@ class CommitDiffRepositoryTest {
 
         @Before
         fun setup() {
-            `when`(env.getGitLabAPIEndPoint()).thenReturn("http://localhost/api/vr/project/1")
+            `when`(env.getGitLabAPIEndPoint()).thenReturn("http://localhost/api/v4/project/1")
             `when`(env.getGitLabToken()).thenReturn("token")
         }
 
@@ -72,10 +72,10 @@ class CommitDiffRepositoryTest {
 
             val captor = argumentCaptor<Request>()
             verify(helper).execute(captor.capture())
-            val response = captor.lastValue
-            assertThat(response.url().toString(), `is`("http://localhost/api/vr/project/1/repository/commits/commit-hash/diff"))
-            assertThat(response.header("PRIVATE-TOKEN"), `is`("token"))
-            assertThat(response.body(), `is`(nullValue()))
+            val request = captor.lastValue
+            assertThat(request.url().toString(), `is`("http://localhost/api/v4/project/1/repository/commits/commit-hash/diff"))
+            assertThat(request.header("PRIVATE-TOKEN"), `is`("token"))
+            assertThat(request.body(), `is`(nullValue()))
         }
 
         private fun load(fileName: String): String {
