@@ -52,9 +52,3 @@ class DiffInfoTest {
     }
 }
 
-class DiffInfoTestBuilder(
-        override var filePath: String,
-        override var ranges: List<Range>) : DiffInfoBuilder {
-
-    override fun build() = DiffInfo(this)
-}

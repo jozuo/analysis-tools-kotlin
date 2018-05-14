@@ -15,8 +15,7 @@ import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.springframework.test.context.junit4.SpringRunner
 import java.io.File
 
